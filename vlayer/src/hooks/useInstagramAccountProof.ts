@@ -26,24 +26,24 @@ export const useInstagramAccountProof = () => {
       chainId: 1,
     },
     steps: [
-      startPage("https://www.instagram.com/", "Go to Instagram login page"),
+      startPage("https://www.instagram.com/accounts/login/", "Go to Instagram login page"),
       expectUrl("https://www.instagram.com/", "Log in to Instagram"),
-      expectUrl(`https://www.instagram.com/${instagramHandle.replace('@', '')}/`, `Navigate to your Instagram profile page (@${instagramHandle.replace('@', '')})`),
+      expectUrl(`https://www.instagram.com/${instagramHandle.replace('@', '')}/`, `Navigate to your profile page (@${instagramHandle.replace('@', '')})`),
       notarize(
-        `https://www.instagram.com/api/v1/users/web_profile_info/?username=${instagramHandle.replace('@', '')}`,
+        "https://i.instagram.com/api/v1/users/web_profile_info/?username=*",
         "GET",
         "Generate Proof of Instagram profile",
         [
           {
             request: {
-              // Redact all request headers for privacy
-              headers_except: [],
+              // Keep X-IG-App-ID header as it's required for the API
+              headers_except: ["X-IG-App-ID"],
             },
           },
           {
             response: {
               // Keep necessary response headers
-              headers_except: ["Content-Type", "Transfer-Encoding"],
+              headers_except: ["Content-Type", "Transfer-Encoding", "X-IG-Set-WWW-Claim"],
             },
           },
         ],

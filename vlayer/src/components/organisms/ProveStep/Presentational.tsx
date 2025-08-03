@@ -18,9 +18,10 @@ export const ProveStepPresentational = ({
             <li>Click "Open Extension" below</li>
             <li>Follow the vlayer extension prompts</li>
             <li>Log into Instagram when prompted</li>
-            <li>Navigate to your profile page (click your profile picture)</li>
-            <li>Wait for the extension to capture the proof</li>
+            <li>Navigate to your Instagram profile page (the extension will guide you)</li>
+            <li>Wait for the extension to capture your profile data automatically</li>
           </ol>
+          <p className="text-blue-600 text-xs mt-2">Note: The extension will automatically detect the Instagram API call when you visit your profile page.</p>
         </div>
         <button
           disabled={disabled}
