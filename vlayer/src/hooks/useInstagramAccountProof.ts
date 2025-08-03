@@ -30,20 +30,20 @@ export const useInstagramAccountProof = () => {
       expectUrl("https://www.instagram.com/", "Log in to Instagram"),
       expectUrl(`https://www.instagram.com/${instagramHandle.replace('@', '')}/`, `Navigate to your profile page (@${instagramHandle.replace('@', '')})`),
       notarize(
-        "https://i.instagram.com/api/v1/users/web_profile_info/?username=*",
-        "GET",
+        "https://www.instagram.com/graphql/query*",
+        "POST",
         "Generate Proof of Instagram profile",
         [
           {
             request: {
-              // Keep X-IG-App-ID header as it's required for the API
-              headers_except: ["X-IG-App-ID"],
+              // Keep necessary headers for Instagram GraphQL API
+              headers_except: ["User-Agent", "X-CSRFToken", "X-IG-App-ID", "X-IG-WWW-Claim", "Content-Type"],
             },
           },
           {
             response: {
               // Keep necessary response headers
-              headers_except: ["Content-Type", "Transfer-Encoding", "X-IG-Set-WWW-Claim"],
+              headers_except: ["Content-Type", "Transfer-Encoding"],
             },
           },
         ],
@@ -109,10 +109,16 @@ export const useInstagramAccountProof = () => {
 
   useEffect(() => {
     if (webProof) {
-      console.log("Instagram webProof", webProof);
+      console.log("Instagram webProof received:", webProof);
       setWebProof(JSON.stringify(webProof));
     }
   }, [JSON.stringify(webProof)]);
+
+  useEffect(() => {
+    if (webProofError) {
+      console.error("Instagram webProof error:", webProofError);
+    }
+  }, [webProofError]);
 
   useEffect(() => {
     if (result) {
