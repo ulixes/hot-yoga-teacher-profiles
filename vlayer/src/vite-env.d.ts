@@ -1,5 +1,10 @@
 /// <reference types="vite/client" />
 
+declare module "*.json" {
+  const value: any;
+  export default value;
+}
+
 interface ImportMetaEnv {
   readonly VITE_SENTRY_DSN: string;
   readonly VITE_PROVER_URL: string;
@@ -7,6 +12,8 @@ interface ImportMetaEnv {
   readonly VITE_WS_PROXY_URL: string;
   readonly VITE_VLAYER_API_TOKEN: string;
   readonly VITE_CHAIN_NAME: string;
+  readonly VITE_PRIVY_APP_ID: string;
+  readonly VITE_REGISTRY_ADDRESS: string;
 }
 
 interface ImportMeta {

@@ -1,6 +1,6 @@
 import { createVlayerClient, type ProveArgs } from "@vlayer/sdk";
-import proverSpec from "../out/WebProofProver.sol/WebProofProver";
-import verifierSpec from "../out/WebProofVerifier.sol/WebProofVerifier";
+import proverSpec from "../out/WebProofProver.sol/WebProofProver.json";
+import verifierSpec from "../out/ProfileRegistry.sol/ProfileRegistry.json";
 import web_proof_development_signature from "../testdata/web_proof_development_signature.json";
 import web_proof_vlayer_signature from "../testdata/web_proof_vlayer_signature.json";
 import web_proof_invalid_signature from "../testdata/web_proof_invalid_signature.json";
@@ -40,8 +40,8 @@ const web_proof =
     : web_proof_development_signature;
 
 const { prover, verifier } = await deployVlayerContracts({
-  proverSpec,
-  verifierSpec,
+  proverSpec: proverSpec as any,
+  verifierSpec: verifierSpec as any,
 });
 
 await writeEnvVariables(".env", {

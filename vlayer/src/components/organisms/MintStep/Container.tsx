@@ -10,7 +10,7 @@ import {
 import { useLocalStorage } from "usehooks-ts";
 import { useInstagramAccountProof } from "../../../hooks/useInstagramAccountProof";
 
-import profileRegistry from "../../../../../out/ProfileRegistry.sol/ProfileRegistry";
+import profileRegistry from "../../../../../out/ProfileRegistry.sol/ProfileRegistry.json";
 import { MintStepPresentational } from "./Presentational";
 import { ensureBalance } from "../../../utils/ethFaucet";
 import { AlreadyMintedError } from "../../../errors";

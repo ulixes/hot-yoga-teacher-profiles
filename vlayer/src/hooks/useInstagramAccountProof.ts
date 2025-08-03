@@ -10,7 +10,7 @@ import { WebProofConfig, ProveArgs } from "@vlayer/sdk";
 import { Abi, ContractFunctionName } from "viem";
 import { startPage, expectUrl, notarize } from "@vlayer/sdk/web_proof";
 import { UseChainError, WebProofError } from "../errors";
-import webProofProver from "../../../out/WebProofProver.sol/WebProofProver";
+import webProofProver from "../../../out/WebProofProver.sol/WebProofProver.json";
 
 export const useInstagramAccountProof = () => {
   const [error, setError] = useState<Error | null>(null);
@@ -80,7 +80,7 @@ export const useInstagramAccountProof = () => {
     "args"
   > = {
     address: import.meta.env.VITE_PROVER_ADDRESS as `0x${string}`,
-    proverAbi: webProofProver.abi,
+    proverAbi: webProofProver.abi as any,
     chainId: chain?.id,
     functionName: "main",
     gasLimit: Number(import.meta.env.VITE_GAS_LIMIT),

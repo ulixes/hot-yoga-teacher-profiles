@@ -1,5 +1,5 @@
-import proverSpec from "../out/WebProofProver.sol/WebProofProver";
-import registrySpec from "../out/ProfileRegistry.sol/ProfileRegistry";
+import proverSpec from "../out/WebProofProver.sol/WebProofProver.json";
+import registrySpec from "../out/ProfileRegistry.sol/ProfileRegistry.json";
 import {
   deployVlayerContracts,
   writeEnvVariables,
@@ -9,8 +9,8 @@ import {
 const config = getConfig();
 
 const { prover, verifier } = await deployVlayerContracts({
-  proverSpec,
-  verifierSpec: registrySpec,
+  proverSpec: proverSpec as any,
+  verifierSpec: registrySpec as any,
 });
 
 await writeEnvVariables(".env", {
