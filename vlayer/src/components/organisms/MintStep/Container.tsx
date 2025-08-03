@@ -21,7 +21,7 @@ export const MintStep = () => {
   const [isMinting, setIsMinting] = useState(false);
   // Using mintingError state to throw error in useEffect because ErrorBoundary does not catch errors from async functions like handleMint
   const [mintingError, setMintingError] = useState<Error | null>(null);
-  const [proverResult] = useLocalStorage("proverResult", "");
+  const [proverResult] = useLocalStorage("instagramProverResult", "");
   const { address } = useAccount();
   const { data: balance } = useBalance({ address });
   const { writeContract, data: txHash, error } = useWriteContract();
@@ -80,7 +80,7 @@ export const MintStep = () => {
   useEffect(() => {
     if (error) {
       setIsMinting(false);
-      if (error.message.includes("User has already minted a TwitterNFT")) {
+      if (error.message.includes("Instagram handle already verified") || error.message.includes("Address already has a teacher profile")) {
         throw new AlreadyMintedError();
       } else if (error.message.includes("User rejected the request")) {
         console.log("User rejected the tx in the wallet");

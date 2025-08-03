@@ -8,7 +8,7 @@ export class AlreadyMintedError extends AppError {
   constructor() {
     super(
       "AlreadyMintedError",
-      "NFT has already been minted for this account.",
+      "Teacher profile has already been created for this Instagram handle or wallet address.",
     );
   }
 }

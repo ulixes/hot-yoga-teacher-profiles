@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { useTwitterAccountProof } from "../../../hooks/useTwitterAccountProof";
+import { useInstagramAccountProof } from "../../../hooks/useInstagramAccountProof";
 import { ProveStepPresentational } from "./Presentational";
 import { useAccount } from "wagmi";
 
@@ -18,7 +18,7 @@ export const ProveStep = () => {
     isCallProverIdle,
     result,
     error,
-  } = useTwitterAccountProof();
+  } = useInstagramAccountProof();
 
   useEffect(() => {
     if (webProof && isCallProverIdle) {
