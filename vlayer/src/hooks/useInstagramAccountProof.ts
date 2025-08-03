@@ -12,42 +12,44 @@ import { startPage, expectUrl, notarize } from "@vlayer/sdk/web_proof";
 import { UseChainError, WebProofError } from "../errors";
 import webProofProver from "../../../out/WebProofProver.sol/WebProofProver";
 
-const webProofConfig: WebProofConfig<Abi, string> = {
-  proverCallCommitment: {
-    address: "0x0000000000000000000000000000000000000000",
-    proverAbi: [],
-    functionName: "proveInstagram",
-    commitmentArgs: [],
-    chainId: 1,
-  },
-  steps: [
-    startPage("https://www.instagram.com/", "Go to Instagram login page"),
-    expectUrl("https://www.instagram.com/", "Log in to Instagram"),
-    // Instagram requires navigation to the user's profile to trigger the API call
-    notarize(
-      "https://www.instagram.com/api/v1/users/web_profile_info/?username=*",
-      "GET",
-      "Generate Proof of Instagram profile",
-      [
-        {
-          request: {
-            // Redact all request headers for privacy
-            headers_except: [],
-          },
-        },
-        {
-          response: {
-            // Keep necessary response headers
-            headers_except: ["Content-Type", "Transfer-Encoding"],
-          },
-        },
-      ],
-    ),
-  ],
-};
-
 export const useInstagramAccountProof = () => {
   const [error, setError] = useState<Error | null>(null);
+  const [instagramHandle] = useLocalStorage("instagramHandle", "");
+
+  // Create dynamic web proof config based on the Instagram handle
+  const webProofConfig: WebProofConfig<Abi, string> = {
+    proverCallCommitment: {
+      address: "0x0000000000000000000000000000000000000000",
+      proverAbi: [],
+      functionName: "proveInstagram",
+      commitmentArgs: [],
+      chainId: 1,
+    },
+    steps: [
+      startPage("https://www.instagram.com/", "Go to Instagram login page"),
+      expectUrl("https://www.instagram.com/", "Log in to Instagram"),
+      expectUrl(`https://www.instagram.com/${instagramHandle.replace('@', '')}/`, `Navigate to your Instagram profile page (@${instagramHandle.replace('@', '')})`),
+      notarize(
+        `https://www.instagram.com/api/v1/users/web_profile_info/?username=${instagramHandle.replace('@', '')}`,
+        "GET",
+        "Generate Proof of Instagram profile",
+        [
+          {
+            request: {
+              // Redact all request headers for privacy
+              headers_except: [],
+            },
+          },
+          {
+            response: {
+              // Keep necessary response headers
+              headers_except: ["Content-Type", "Transfer-Encoding"],
+            },
+          },
+        ],
+      ),
+    ],
+  };
 
   const {
     requestWebProof,
