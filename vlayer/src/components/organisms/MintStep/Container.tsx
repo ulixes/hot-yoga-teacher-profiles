@@ -8,6 +8,7 @@ import {
 } from "wagmi";
 
 import { useLocalStorage } from "usehooks-ts";
+import { useInstagramAccountProof } from "../../../hooks/useInstagramAccountProof";
 
 import webProofProofVerifier from "../../../../../out/WebProofVerifier.sol/WebProofVerifier";
 import { MintStepPresentational } from "./Presentational";
@@ -19,6 +20,7 @@ export const MintStep = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [mintedHandle, setMintedHandle] = useState<string | null>(null);
   const [isMinting, setIsMinting] = useState(false);
+  const [isGeneratingProof, setIsGeneratingProof] = useState(false);
   // Using mintingError state to throw error in useEffect because ErrorBoundary does not catch errors from async functions like handleMint
   const [mintingError, setMintingError] = useState<Error | null>(null);
   const [proverResult] = useLocalStorage("instagramProverResult", "");
@@ -28,6 +30,40 @@ export const MintStep = () => {
   const { status } = useWaitForTransactionReceipt({
     hash: txHash,
   });
+
+  const {
+    callProver,
+    isPending: isProverPending,
+    result: proverResultFromHook,
+    error: proverError,
+  } = useInstagramAccountProof();
+
+  // Check for stored webProof and call prover when wallet is connected
+  useEffect(() => {
+    const storedWebProof = localStorage.getItem("instagram_webproof");
+    if (storedWebProof && address && !proverResult && !isGeneratingProof) {
+      setIsGeneratingProof(true);
+      const webProof = JSON.parse(storedWebProof);
+      void callProver([webProof, address]);
+    }
+  }, [address, proverResult, callProver, isGeneratingProof]);
+
+  // Handle prover result
+  useEffect(() => {
+    if (proverResultFromHook) {
+      setIsGeneratingProof(false);
+      // Clean up stored webProof since we now have the prover result
+      localStorage.removeItem("instagram_webproof");
+    }
+  }, [proverResultFromHook]);
+
+  // Handle prover error
+  useEffect(() => {
+    if (proverError) {
+      setIsGeneratingProof(false);
+      setMintingError(proverError);
+    }
+  }, [proverError]);
 
   useEffect(() => {
     if (proverResult) {
@@ -101,6 +137,8 @@ export const MintStep = () => {
     <MintStepPresentational
       handleMint={() => void handleMint()}
       isMinting={isMinting}
+      isGeneratingProof={isGeneratingProof || isProverPending}
+      hasProof={!!proverResult}
     />
   );
 };

@@ -12,11 +12,11 @@ export const WelcomeScreen = () => {
       {!isMobile && (
         <div className="mt-5 flex justify-center">
           <Link
-            to="connect-wallet"
+            to="enter-handle"
             id="nextButton"
             data-testid="start-page-button"
           >
-            Start
+            Start Verification
           </Link>
         </div>
       )}

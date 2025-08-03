@@ -16,13 +16,9 @@ const useConnectWallet = () => {
   const isWalletConnected = account.isConnected;
 
   const next = useCallback(() => {
-    if (hasExtensionInstalled) {
-      void navigate("/start-proving");
-    } else {
-      void navigate("/install-extension");
-    }
+    void navigate("/create-profile");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasExtensionInstalled]);
+  }, []);
 
   const connectWallet = async () => {
     await openWallet();

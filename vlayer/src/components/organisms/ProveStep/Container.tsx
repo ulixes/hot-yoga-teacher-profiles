@@ -2,11 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { useInstagramAccountProof } from "../../../hooks/useInstagramAccountProof";
 import { ProveStepPresentational } from "./Presentational";
-import { useAccount } from "wagmi";
 
 export const ProveStep = () => {
   const navigate = useNavigate();
-  const { address } = useAccount();
   const [disabled, setDisabled] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -22,13 +20,16 @@ export const ProveStep = () => {
 
   useEffect(() => {
     if (webProof && isCallProverIdle) {
-      void callProver([webProof, address]);
+      // Store webProof for later use when wallet is connected
+      localStorage.setItem("instagram_webproof", JSON.stringify(webProof));
+      // Navigate to wallet connection after successful proof
+      void navigate("/connect-wallet");
     }
-  }, [webProof, address, callProver, isCallProverIdle]);
+  }, [webProof, isCallProverIdle, navigate]);
 
   useEffect(() => {
     if (result) {
-      void navigate("/mint");
+      void navigate("/connect-wallet");
     }
   }, [result, navigate]);
 
