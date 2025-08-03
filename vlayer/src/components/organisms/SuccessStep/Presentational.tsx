@@ -12,7 +12,7 @@ export const SuccessStepPresentational = ({
   return (
     <>
       <p className="text-gray-500">
-        @{handle} was minted to{" "}
+        Hot Yoga Teacher profile for @{handle} was created! Transaction:{" "}
         <a
           href={`${blockExplorer}/tx/${tx}`}
           target="_blank"
@@ -36,7 +36,7 @@ export const SuccessStepPresentational = ({
       </p>
       <div className="mt-2 flex justify-center">
         <Link to="/" id="nextButton">
-          Start again
+          Create Another Profile
         </Link>
       </div>
     </>
