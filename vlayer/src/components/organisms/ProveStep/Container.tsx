@@ -24,14 +24,14 @@ export const ProveStep = () => {
       console.log("Instagram webProof received in ProveStep, navigating to wallet connection");
       // Store webProof for later use when wallet is connected
       localStorage.setItem("instagram_webproof", JSON.stringify(webProof));
-      // Navigate to wallet connection after successful proof
-      void navigate("/connect-wallet");
+      // Navigate to authentication after successful proof
+      void navigate("/authenticate");
     }
   }, [webProof, isCallProverIdle, navigate, isPending, error]);
 
   useEffect(() => {
     if (result) {
-      void navigate("/connect-wallet");
+      void navigate("/authenticate");
     }
   }, [result, navigate]);
 

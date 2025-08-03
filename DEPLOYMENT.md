@@ -17,7 +17,23 @@
 
 1. **vlayer API Token**: Required from [dashboard.vlayer.xyz](https://dashboard.vlayer.xyz)
 2. **Private Key**: Ethereum testnet private key for contract deployment
-3. **vlayer Browser Extension**: Install from Chrome Web Store
+3. **Privy App ID**: Required from [dashboard.privy.io](https://dashboard.privy.io)
+4. **vlayer Browser Extension**: Install from Chrome Web Store
+
+### Environment Setup
+
+### Setting Up Privy
+
+1. **Create Privy Account**:
+   - Visit [dashboard.privy.io](https://dashboard.privy.io)
+   - Sign up for a free account
+   - Create a new app for your hot yoga platform
+
+2. **Configure Privy App**:
+   - Set your app name: "Hot Yoga Teacher Platform"
+   - Configure login methods: Email, Google, Discord
+   - Set redirect URLs to include your domain
+   - Copy your App ID from the dashboard
 
 ### Environment Setup
 
@@ -25,6 +41,7 @@ Create `vlayer/.env.testnet.local`:
 ```env
 VLAYER_API_TOKEN=your_jwt_token_from_dashboard
 EXAMPLES_TEST_PRIVATE_KEY=0x...your_private_key
+PRIVY_APP_ID=your_privy_app_id_from_dashboard
 ```
 
 ### Quick Start
@@ -111,10 +128,14 @@ netstat -tlnp | grep 5137
 2. **App not starting**: Verify all dependencies installed
 3. **Contract deployment fails**: Check API token and private key
 4. **Web proof fails**: Ensure vlayer browser extension is installed
+5. **Authentication fails**: Verify Privy App ID is correct and domain is configured
+6. **Wallet creation fails**: Check Privy dashboard settings for embedded wallet configuration
 
 ### Security Notes
 
-- Never commit private keys to version control
-- Use environment variables for all secrets
+- Never commit private keys or API tokens to version control
+- Use environment variables for all secrets (vlayer tokens, Privy App ID, private keys)
+- Configure Privy domain restrictions in production
 - Consider IP whitelisting for admin functions
 - Regular security updates recommended
+- Privy handles wallet security and key management automatically

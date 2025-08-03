@@ -1,5 +1,5 @@
 import proverSpec from "../out/WebProofProver.sol/WebProofProver";
-import verifierSpec from "../out/WebProofVerifier.sol/WebProofVerifier";
+import registrySpec from "../out/ProfileRegistry.sol/ProfileRegistry";
 import {
   deployVlayerContracts,
   writeEnvVariables,
@@ -10,12 +10,12 @@ const config = getConfig();
 
 const { prover, verifier } = await deployVlayerContracts({
   proverSpec,
-  verifierSpec,
+  verifierSpec: registrySpec,
 });
 
 await writeEnvVariables(".env", {
   VITE_PROVER_ADDRESS: prover,
-  VITE_VERIFIER_ADDRESS: verifier,
+  VITE_REGISTRY_ADDRESS: verifier,
   VITE_CHAIN_NAME: config.chainName,
   VITE_PROVER_URL: config.proverUrl,
   VITE_JSON_RPC_URL: config.jsonRpcUrl,
@@ -24,4 +24,5 @@ await writeEnvVariables(".env", {
   VITE_NOTARY_URL: config.notaryUrl,
   VITE_WS_PROXY_URL: config.wsProxyUrl,
   VITE_GAS_LIMIT: config.gasLimit,
+  VITE_PRIVY_APP_ID: process.env.PRIVY_APP_ID || "",
 });

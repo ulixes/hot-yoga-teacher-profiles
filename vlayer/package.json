@@ -23,6 +23,8 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@privy-io/react-auth": "^2.21.0",
+    "@privy-io/wagmi": "^1.0.5",
     "@reown/appkit": "^1.6.9",
     "@reown/appkit-adapter-wagmi": "^1.6.9",
     "@sentry/react": "^8.54.0",

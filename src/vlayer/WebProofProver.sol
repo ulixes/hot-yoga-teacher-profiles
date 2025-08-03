@@ -9,8 +9,8 @@ contract WebProofProver is Prover {
     using WebProofLib for WebProof;
     using WebLib for Web;
 
-    // Instagram API endpoint pattern for user profile verification
-    string public constant DATA_URL = "https://www.instagram.com/api/v1/users/web_profile_info/?username=*";
+    // Instagram GraphQL endpoint pattern for user profile verification
+    string public constant DATA_URL = "https://www.instagram.com/graphql/query*";
 
     function main(WebProof calldata webProof, address account)
         public
@@ -19,8 +19,9 @@ contract WebProofProver is Prover {
     {
         Web memory web = webProof.verify(DATA_URL);
 
-        // Extract username from Instagram API response
-        // Instagram returns data in format: {"data":{"user":{"username":"handle"}}}
+        // Extract username from Instagram GraphQL response
+        // Instagram GraphQL returns data in format: {"data":{"user":{"username":"handle"}}}
+        // For GraphQL queries, the response structure may vary, but typically contains user data
         string memory username = web.jsonGetString("data.user.username");
 
         return (proof(), username, account);

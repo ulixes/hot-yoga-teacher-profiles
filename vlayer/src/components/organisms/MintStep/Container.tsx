@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import { usePrivy } from '@privy-io/react-auth';
 import {
   useWriteContract,
   useWaitForTransactionReceipt,
   useAccount,
-  useBalance,
 } from "wagmi";
 
 import { useLocalStorage } from "usehooks-ts";
 import { useInstagramAccountProof } from "../../../hooks/useInstagramAccountProof";
 
-import webProofProofVerifier from "../../../../../out/WebProofVerifier.sol/WebProofVerifier";
+import profileRegistry from "../../../../../out/ProfileRegistry.sol/ProfileRegistry";
 import { MintStepPresentational } from "./Presentational";
 import { ensureBalance } from "../../../utils/ethFaucet";
 import { AlreadyMintedError } from "../../../errors";
@@ -24,8 +24,8 @@ export const MintStep = () => {
   // Using mintingError state to throw error in useEffect because ErrorBoundary does not catch errors from async functions like handleMint
   const [mintingError, setMintingError] = useState<Error | null>(null);
   const [proverResult] = useLocalStorage("instagramProverResult", "");
+  const { user } = usePrivy();
   const { address } = useAccount();
-  const { data: balance } = useBalance({ address });
   const { writeContract, data: txHash, error } = useWriteContract();
   const { status } = useWaitForTransactionReceipt({
     hash: txHash,
@@ -80,7 +80,7 @@ export const MintStep = () => {
     modalRef.current?.showModal();
   }, [proverResult]);
 
-  const handleMint = async () => {
+  const handleMint = async (bio: string, specialization: string) => {
     setIsMinting(true);
     if (!proverResult) {
       return;
@@ -90,18 +90,17 @@ export const MintStep = () => {
       typeof writeContract
     >[0]["args"];
     console.log("proofData", proofData);
+    
+    // Store bio and specialization for later use after profile creation
+    localStorage.setItem("teacher_bio", bio);
+    localStorage.setItem("teacher_specialization", specialization);
+    
     const writeContractArgs: Parameters<typeof writeContract>[0] = {
-      address: import.meta.env.VITE_VERIFIER_ADDRESS as `0x${string}`,
-      abi: webProofProofVerifier.abi,
-      functionName: "verify",
+      address: import.meta.env.VITE_REGISTRY_ADDRESS as `0x${string}`,
+      abi: profileRegistry.abi,
+      functionName: "registerTeacher",
       args: proofData,
     };
-
-    try {
-      await ensureBalance(address as `0x${string}`, balance?.value ?? 0n);
-    } catch (error) {
-      setMintingError(error as Error);
-    }
 
     writeContract(writeContractArgs);
   };
@@ -116,7 +115,7 @@ export const MintStep = () => {
   useEffect(() => {
     if (error) {
       setIsMinting(false);
-      if (error.message.includes("Instagram handle already verified") || error.message.includes("Address already has a teacher profile")) {
+      if (error.message.includes("Instagram handle already registered") || error.message.includes("Address already has a teacher profile")) {
         throw new AlreadyMintedError();
       } else if (error.message.includes("User rejected the request")) {
         console.log("User rejected the tx in the wallet");
@@ -135,7 +134,7 @@ export const MintStep = () => {
 
   return (
     <MintStepPresentational
-      handleMint={() => void handleMint()}
+      handleMint={(bio: string, specialization: string) => void handleMint(bio, specialization)}
       isMinting={isMinting}
       isGeneratingProof={isGeneratingProof || isProverPending}
       hasProof={!!proverResult}

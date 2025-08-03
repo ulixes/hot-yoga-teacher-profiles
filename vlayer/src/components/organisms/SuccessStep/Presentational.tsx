@@ -12,12 +12,12 @@ export const SuccessStepPresentational = ({
   return (
     <>
       <p className="text-gray-500">
-        Hot Yoga Teacher profile for @{handle} was created! Transaction:{" "}
+        Welcome to the Hot Yoga Teacher community! Your verified profile for @{handle} has been created. Transaction:{" "}
         <a
           href={`${blockExplorer}/tx/${tx}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-violet-500 underline"
+          className="text-orange-500 underline"
         >
           {tx.slice(0, 6)}...{tx.slice(-4)}
         </a>
@@ -27,7 +27,7 @@ export const SuccessStepPresentational = ({
           href={`${blockExplorer}/tx/${tx}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm font-semibold leading-4 text-center text-indigo-600 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 inline-flex items-center"
+          className="text-sm font-semibold leading-4 text-center text-orange-600 hover:text-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 inline-flex items-center"
           tabIndex={0}
         >
           See it on block explorer
@@ -36,7 +36,7 @@ export const SuccessStepPresentational = ({
       </p>
       <div className="mt-2 flex justify-center">
         <Link to="/" id="nextButton">
-          Create Another Profile
+          Add Another Teacher
         </Link>
       </div>
     </>
