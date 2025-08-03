@@ -16,6 +16,8 @@ export const useInstagramAccountProof = () => {
   const [error, setError] = useState<Error | null>(null);
   const [instagramHandle] = useLocalStorage("instagramHandle", "");
 
+  console.log("useInstagramAccountProof - Instagram handle:", instagramHandle);
+
   // Create dynamic web proof config based on the Instagram handle
   const webProofConfig: WebProofConfig<Abi, string> = {
     proverCallCommitment: {
@@ -50,6 +52,8 @@ export const useInstagramAccountProof = () => {
       ),
     ],
   };
+
+  console.log("Instagram webProofConfig:", webProofConfig);
 
   const {
     requestWebProof,
